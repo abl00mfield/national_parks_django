@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ParkNotes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- optional custom css -->
+    {% block head%}
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <a href="/" class="logo">ParkNotes</a>
+                
+                <ul class="nav-links">
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'dashboard' %}">My Parks</a></li>
+                        <li><a href="{% url 'park_list' %}">Add a Park</a></li>
+                        <li>
+                            <form method="POST" action="{% url 'logout' %}" id="logout-form">
+                                {% csrf_token %}
+                                <button type="submit">Sign Out</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'signin' %}">Sign In</a></li>
+                        <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        <!-- Page-specific content will be inserted here -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2025 ParkNotes. All rights reserved.</p>
+    </footer>
+</body>
+</html>
