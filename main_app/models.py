@@ -9,6 +9,7 @@ class NationalPark(models.Model):
     established_date = models.DateField(null=True, blank=True)
     area_in_acres = models.FloatField(null=True, blank=True)
     website = models.URLField(blank=True)
+    photo_url = models.URLField(blank=True)
 
     def __str__(self):
         return self.name
@@ -27,12 +28,13 @@ class UserParkInfo(models.Model):
     )
     visited = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    user_photo = models.ImageField(upload_to="user_photos/", null=True, blank=True)
 
     class Meta:
         unique_together = ("user", "park")
 
     def __str__(self):
-        return f"{self.user.username}'s info form {self.park.name}"
+        return f"{self.user.username}'s info for {self.park.name}"
 
 
 # Create your models here.
