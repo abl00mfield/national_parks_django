@@ -8,12 +8,81 @@ load_dotenv()
 API_KEY = os.getenv("NATIONAL_PARKS_API_KEY")
 BASE_URL = "https://developer.nps.gov/api/v1/parks"
 
+OFFICIAL_NATIONAL_PARK_CODES = [
+    "acad",
+    "arch",
+    "badl",
+    "bibe",
+    "bisc",
+    "blca",
+    "brca",
+    "cany",
+    "care",
+    "cave",
+    "chan",
+    "choh",
+    "cong",
+    "crla",
+    "cuga",
+    "cuva",
+    "deva",
+    "dena",
+    "drto",
+    "ever",
+    "gaar",
+    "glac",
+    "grba",
+    "grca",
+    "grsa",
+    "grsm",
+    "gumo",
+    "hale",
+    "havo",
+    "hosp",
+    "indu",
+    "isro",
+    "jotr",
+    "katm",
+    "kefj",
+    "kova",
+    "lacl",
+    "lavo",
+    "maca",
+    "meve",
+    "mora",
+    "noca",
+    "olym",
+    "pefo",
+    "pinn",
+    "redw",
+    "romo",
+    "sagu",
+    "seki",
+    "shen",
+    "thro",
+    "viis",
+    "voyg",
+    "whsa",
+    "wica",
+    "wrst",
+    "yell",
+    "yose",
+    "zion",
+    "amis",
+    "care",
+    "jotr",
+    "katm",
+    "kefj",
+    "lacl",
+    "wrst",
+    "gaar",
+]
+
 
 def import_parks():
     params = {
         "api_key": API_KEY,
-        "limit": 75,  # Load a lot of parks at once
-        "designation": "National Park",
+        "limit": 500,  # Load a lot of parks at once
     }
 
     response = requests.get(BASE_URL, params=params)
@@ -22,8 +91,13 @@ def import_parks():
         return
 
     data = response.json().get("data", [])
+    parks_imported = 0
+    photos_imported = 0
 
     for park_data in data:
+        if park_data.get("parkCode") not in OFFICIAL_NATIONAL_PARK_CODES:
+            continue
+
         full_name = park_data.get("fullName")
         states = park_data.get("states")
         description = park_data.get("description")
@@ -45,9 +119,16 @@ def import_parks():
         if not created:
             park.photos.all().delete()
 
-        for image in images:
+        for index, image in enumerate(images):
+            if index >= 5:
+                break
+
             ParkPhoto.objects.create(
                 park=park, image_url=image.get("url"), alt_text=image.get("altText", "")
             )
+            photos_imported += 1
 
-    print(f"Imported {len(data)} parks!")
+        parks_imported += 1
+
+    print(f"Imported {parks_imported} parks!")
+    print(f"Imported {photos_imported} photos!")
