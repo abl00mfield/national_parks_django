@@ -1,0 +1,28 @@
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head%}
+<link rel="stylesheet" href="{% static 'css/park_list.css' %}" />
+{% endblock %}
+
+{% block content %}
+<h1>Explore National Parks</h1>
+
+<div class="parks-grid">
+    {% for park in parks %}
+        <div class="park-card">
+            {% if park.photo_url %}
+                <img src="{{ park.photo_url }}" alt="{{ park.name }}">
+            {% else %}
+                <div class="no-photo">No photo available</div>
+            {% endif %}
+            <h2>{{ park.name }}</h2>
+            <p>{{ park.location }}</p>
+        </div>
+    {% empty %}
+        <p>No parks found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

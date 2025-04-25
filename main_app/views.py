@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from .models import NationalPark
 
 
 def home(request):
@@ -19,7 +20,8 @@ class Signin(LoginView):
 
 @login_required
 def park_list(request):
-    return render(request, "park_list.html")
+    parks = NationalPark.objects.all().order_by("name")
+    return render(request, "park_list.html", {"parks": parks})
 
 
 def signup(request):
