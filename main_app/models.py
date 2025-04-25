@@ -6,13 +6,22 @@ class NationalPark(models.Model):
     name = models.CharField(max_length=200, unique=True)
     location = models.CharField(max_length=200, blank=True)
     description = models.TextField(blank=True)
-    established_date = models.DateField(null=True, blank=True)
-    area_in_acres = models.FloatField(null=True, blank=True)
     website = models.URLField(blank=True)
     photo_url = models.URLField(blank=True)
 
     def __str__(self):
         return self.name
+
+
+class ParkPhoto(models.Model):
+    park = models.ForeignKey(
+        NationalPark, on_delete=models.CASCADE, related_name="photos"
+    )
+    image_url = models.URLField()
+    alt_text = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f"Photo for {self.park.name}"
 
 
 class UserParkInfo(models.Model):
