@@ -1,0 +1,18 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Add {{ park.name }} to My Parks</h1>
+
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Save to My Parks</button>
+</form>
+
+<div style="margin-top: 2rem;">
+    <a href="{% url 'park_list' %}" class="btn">← Back to All Parks</a>
+</div>
+{% endblock %}

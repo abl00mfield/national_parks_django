@@ -3,7 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from .models import NationalPark
+from django.views.generic.edit import CreateView
+from .models import UserParkInfo, NationalPark
+from .forms import UserParkInfoForm
+from django.urls import reverse_lazy
 
 
 def home(request):
@@ -47,4 +50,29 @@ def signup(request):
     return render(request, "signup.html", context)
 
 
-# Create your views here.
+class UserParkInfoCreate(CreateView):
+    model = UserParkInfo
+    form_class = UserParkInfoForm
+    template_name = "user_parkinfo_form.html"
+
+    def form_valid(self, form):
+        park = NationalPark.objects.get(id=self.kwargs["park_id"])
+        user = self.request.user
+
+        # if the user has already saved this park
+        # TODO - add a message to the user that they already added the park
+
+        if UserParkInfo.objects.filter(user=user, park=park).exists():
+            return redirect("dashboard")
+        else:
+            form.instance.user = user
+            form.instance.park = park
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["park"] = NationalPark.objects.get(id=self.kwargs["park_id"])
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy("dashboard")

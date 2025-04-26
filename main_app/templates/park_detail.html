@@ -8,6 +8,11 @@
 {% block content %}
 <div class="park-detail-container">
     <h1>{{ park.name }}</h1>
+    {% if user.is_authenticated %}
+        <div class = "add-to-my-parks">
+            <a class = "btn" href="{% url 'add_user_park' park.id %}">Add to my parks</a>
+        </div>
+    {% endif %}
     <p><strong>Location:</strong> {{ park.location }}</p>
     <p>{{ park.description }}</p>
     {% if park.website %}
