@@ -4,7 +4,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.views.generic.edit import CreateView
-from .models import UserParkInfo, NationalPark
+from .models import UserParkInfo, NationalPark, ParkPhoto
 from .forms import UserParkInfoForm
 from django.urls import reverse_lazy
 
@@ -58,15 +58,25 @@ class UserParkInfoCreate(CreateView):
     def form_valid(self, form):
         park = NationalPark.objects.get(id=self.kwargs["park_id"])
         user = self.request.user
+        photo_id = self.kwargs.get("photo_id")
 
         # if the user has already saved this park
         # TODO - add a message to the user that they already added the park
-
         if UserParkInfo.objects.filter(user=user, park=park).exists():
             return redirect("dashboard")
         else:
+            if photo_id:
+                try:
+                    form.instance.chosen_photo = park.photos.get(id=photo_id)
+                except ParkPhoto.DoesNotExist:
+                    pass
+            else:
+                first_photo = park.photos.first()
+                if first_photo:
+                    form.instance.chosen_photo = first_photo
             form.instance.user = user
             form.instance.park = park
+
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

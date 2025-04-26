@@ -8,21 +8,27 @@
 {% block content %}
 <div class="park-detail-container">
     <h1>{{ park.name }}</h1>
-    {% if user.is_authenticated %}
-        <div class = "add-to-my-parks">
-            <a class = "btn" href="{% url 'add_user_park' park.id %}">Add to my parks</a>
-        </div>
-    {% endif %}
+   
     <p><strong>Location:</strong> {{ park.location }}</p>
     <p>{{ park.description }}</p>
     {% if park.website %}
         <p><a href="{{ park.website }}" target="_blank">Visit Official Website</a></p>
     {% endif %}
+    {% if user.is_authenticated %}
+    <div class = "add-to-my-parks">
+        <a class = "btn" href="{% url 'add_user_park' park.id %}">Add Park (no photo selected)</a>
+    </div>
+    {% endif %}
 
     <h2>Photo Gallery</h2>
     <div class="photo-gallery">
         {% for photo in photos %}
+        <div class="photo-option">
             <img src="{{ photo.image_url }}" alt="{{ photo.alt_text }}">
+            {% if user.is_authenticated %}
+                <a class = "btn" href="{% url 'add_user_park_with_photo' park.id photo.id %}">Use This Photo</a>
+            {% endif%}
+        </div>
         {% empty %}
             <p>No photos available for this park.</p>
         {% endfor %}

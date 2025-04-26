@@ -37,6 +37,9 @@ class UserParkInfo(models.Model):
     )
     visited = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    chosen_photo = models.ForeignKey(
+        "ParkPhoto", null=True, blank=True, on_delete=models.SET_NULL
+    )
     user_photo = models.ImageField(upload_to="user_photos/", null=True, blank=True)
 
     class Meta:

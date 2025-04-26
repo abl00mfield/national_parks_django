@@ -14,4 +14,9 @@ urlpatterns = [
         views.UserParkInfoCreate.as_view(),
         name="add_user_park",
     ),
+    path(
+        "parks/<int:park_id>/add/<int:photo_id>",
+        views.UserParkInfoCreate.as_view(),
+        name="add_user_park_with_photo",
+    ),
 ]
