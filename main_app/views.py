@@ -24,6 +24,13 @@ def park_list(request):
     return render(request, "park_list.html", {"parks": parks})
 
 
+@login_required
+def park_detail(request, park_id):
+    park = NationalPark.objects.get(id=park_id)
+    photos = park.photos.all()
+    return render(request, "park_detail.html", {"park": park, "photos": photos})
+
+
 def signup(request):
     error_message = ""
     if request.method == "POST":

@@ -13,13 +13,15 @@
 <div class="parks-grid">
     {% for park in parks %}
         <div class="park-card">
-            {% if park.photo_url %}
-                <img src="{{ park.photo_url }}" alt="{{ park.name }}">
-            {% else %}
-                <div class="no-photo">No photo available</div>
-            {% endif %}
-            <h2>{{ park.name }}</h2>
-            <p>{{ park.location }}</p>
+            <a href="{% url 'park_detail' park.id %}">
+                {% if park.photo_url %}
+                    <img src="{{ park.photo_url }}" alt="{{ park.name }}">
+                {% else %}
+                    <div class="no-photo">No photo available</div>
+                {% endif %}
+                <h2>{{ park.name }}</h2>
+                <p>{{ park.location }}</p>
+            </a>
         </div>
     {% empty %}
         <p>No parks found.</p>

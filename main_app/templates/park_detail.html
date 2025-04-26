@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href=" {% static 'css/park_detail.css' %}">
+{% endblock%}
+
+{% block content %}
+<div class="park-detail-container">
+    <h1>{{ park.name }}</h1>
+    <p><strong>Location:</strong> {{ park.location }}</p>
+    <p>{{ park.description }}</p>
+    {% if park.website %}
+        <p><a href="{{ park.website }}" target="_blank">Visit Official Website</a></p>
+    {% endif %}
+
+    <h2>Photo Gallery</h2>
+    <div class="photo-gallery">
+        {% for photo in photos %}
+            <img src="{{ photo.image_url }}" alt="{{ photo.alt_text }}">
+        {% empty %}
+            <p>No photos available for this park.</p>
+        {% endfor %}
+    </div>
+
+    <div class="back-link">
+        <a class = "btn" href="{% url 'park_list' %}">← Back to All Parks</a>
+    </div>
+</div>
+{% endblock %}
