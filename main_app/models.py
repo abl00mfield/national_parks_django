@@ -40,13 +40,23 @@ class UserParkInfo(models.Model):
     chosen_photo = models.ForeignKey(
         "ParkPhoto", null=True, blank=True, on_delete=models.SET_NULL
     )
-    user_photo = models.ImageField(upload_to="user_photos/", null=True, blank=True)
 
     class Meta:
         unique_together = ("user", "park")
 
     def __str__(self):
         return f"{self.user.username}'s info for {self.park.name}"
+
+
+class UserPhoto(models.Model):
+    user_park_info = models.ForeignKey(
+        UserParkInfo, on_delete=models.CASCADE, related_name="user_photos"
+    )
+    image = models.ImageField(upload_to="user_photos/")
+    caption = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f"Photo for {self.user_park_info.park.name} by {self.user_park_info.user.username}"
 
 
 # Create your models here.
