@@ -7,7 +7,7 @@ from django.contrib.auth import login
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from .models import UserParkInfo, NationalPark, ParkPhoto
-from .forms import UserParkInfoForm, UserParkInfoEditForm
+from .forms import UserParkInfoForm
 from django.urls import reverse_lazy
 
 
@@ -68,6 +68,7 @@ class UserParkInfoCreate(LoginRequiredMixin, CreateView):
         # if the user has already saved this park
         # TODO - add a message to the user that they already added the park
         if UserParkInfo.objects.filter(user=user, park=park).exists():
+            messages.success(self.request, "You already added this park!")
             return redirect("dashboard")
         else:
             if photo_id:
@@ -77,6 +78,7 @@ class UserParkInfoCreate(LoginRequiredMixin, CreateView):
                     pass
             form.instance.user = user
             form.instance.park = park
+            messages.success(self.request, "Park added successfully!")
 
         return super().form_valid(form)
 
@@ -91,8 +93,8 @@ class UserParkInfoCreate(LoginRequiredMixin, CreateView):
 
 class UserParkInfoUpdate(LoginRequiredMixin, UpdateView):
     model = UserParkInfo
-    form_class = UserParkInfoEditForm
-    template_name = "user_parkinfo_edit.html"
+    form_class = UserParkInfoForm
+    template_name = "user_parkinfo_form.html"
 
     def form_valid(self, form):
         messages.success(self.request, "Park information updated successfully!")

@@ -18,25 +18,28 @@
             {% else %}
                 <div class="no-photo">No Photo Available</div>
             {% endif %}
-            <h2>{{ user_park.park.name }}</h2>
+            <div class="park-info-container">
+                <div class="park-info">
+                    <h2>{{ user_park.park.name }}</h2>
 
-            {% if user_park.visited %}
-                <span class = "badge-visted">Visited</span>
-            {% else %}
-                <span class="badge-planned">Planned Visit</span>
-            {% endif %}
+                    {% if user_park.visited %}
+                        <span class = "badge-visited">Visited</span>
+                    {% else %}
+                        <span class="badge-planned">Planned Visit</span>
+                    {% endif %}
 
-            {% if user_park.rating %}
-                <p><strong>Rating: </strong> {{ user_park.rating }} </p>
-            {% endif %}
+                    {% if user_park.rating %}
+                        <p><strong>Rating: </strong> {{ user_park.rating }} </p>
+                    {% endif %}
 
-            {% if user_park.notes %}
-                <p>{{ user_park.notes }}</p>
-            {% endif %}
-
-            <div class="class-actions">
-                <a href="{% url 'edit_user_park' user_park.id %}" class="btn small-btn">Edit</a>
-                <a href="{% url 'delete_user_park' user_park.id %}" class="btn small-btn danger-btn">Delete</a>
+                    {% if user_park.notes %}
+                        <p>{{ user_park.notes }}</p>
+                    {% endif %}
+                </div>
+                <div class="card-actions">
+                    <a href="{% url 'edit_user_park' user_park.id %}" class="btn small-btn">Edit</a>
+                    <a href="{% url 'delete_user_park' user_park.id %}" class="btn small-btn danger-btn">Delete</a>
+                </div>
             </div>
         </div>
     {% endfor%}

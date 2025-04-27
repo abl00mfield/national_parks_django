@@ -1,21 +1,32 @@
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
   justify-content: center;
 }
 
 .park-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   justify-self: center;
   background: #f8f9fa;
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
-  max-width: 400px;
+  max-width: 300px;
   width: 100%;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.park-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
 }
 
 .park-card img {

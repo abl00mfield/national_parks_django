@@ -1,18 +1,38 @@
-
 {% extends "base.html" %}
+{% load static %}
+
+{% block head%}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock%}
 
 {% block content %}
 
-<h1>Add {{ park.name }} to My Parks</h1>
+{% if object %}
+    <h1>Edit Notes for {{ object.park.name }}</h1>
+{% elif park %}
+    <h1>Add {{ park.name }} to Your Parks</h1>
+{% else %}
+    <h1>Add a Park to Your Parks</h1> 
+{% endif %}
 
 
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn">Save to My Parks</button>
+    <button 
+        type="submit" 
+        class="btn {% if object %}btn-update{% else %}btn-create{% endif %}">
+        {% if object %}Update Park Info{% else %}Save to My Parks{% endif %}
+    </button>
 </form>
 
 <div style="margin-top: 2rem;">
-    <a href="{% url 'park_list' %}" class="btn">← Back to All Parks</a>
+    {% if object %}
+        <a href="{% url 'dashboard' %}" class="btn">← Back to My Parks</a>
+    {% elif park %}
+        <a href="{% url 'park_list' %}" class="btn">← Back to All Parks</a>
+    {% else %}
+        <a href="{% url 'dashboard' %}" class="btn">← Back</a> 
+    {% endif %}
 </div>
 {% endblock %}
