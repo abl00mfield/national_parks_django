@@ -1,7 +1,47 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block head%}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock%}
 
 {% block content %}
-<h1>Welcome, {{ user.username }}!</h1>
-<p>Here are your saved parks:</p>
-<!-- parks list here -->
+<h1>Welcome, {{ user.username }} to your park adventures!</h1>
+{% if user_park_infos %}
+<div class="dashboard-grid">
+    {% for user_park in user_park_infos %}
+        <div class="park-card">
+            {% if user_park.chosen_photo %}
+                <img src="{{ user_park.chosen_photo.image_url }}" alt="{{ user_park.park.name }}"/>
+            {% elif user_park.park.photo_url %}
+                <img src="{{ user_park.park.photo_url}}" alt="{{ user_park.park.name }}"/>
+            {% else %}
+                <div class="no-photo">No Photo Available</div>
+            {% endif %}
+            <h2>{{ user_park.park.name }}</h2>
+
+            {% if user_park.visited %}
+                <span class = "badge-visted">Visited</span>
+            {% else %}
+                <span class="badge-planned">Planned Visit</span>
+            {% endif %}
+
+            {% if user_park.rating %}
+                <p><strong>Rating: </strong> {{ user_park.rating }} </p>
+            {% endif %}
+
+            {% if user_park.notes %}
+                <p>{{ user_park.notes }}</p>
+            {% endif %}
+
+            <div class="class-actions">
+                <a href="" class="btn small-btn">Edit</a>
+                <a href="" class="btn small-btn danger-btn">Delete</a>
+            </div>
+        </div>
+    {% endfor%}
+</div>
+{% else %}
+    <p>You haven't added any parks yet. Expore and add some!</p>
+{% endif %}
 {% endblock %}

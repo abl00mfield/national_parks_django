@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from .models import UserParkInfo, NationalPark, ParkPhoto
-from .forms import UserParkInfoForm
+from .forms import UserParkInfoForm, UserParkInfoEditForm
 from django.urls import reverse_lazy
 
 
@@ -13,8 +14,11 @@ def home(request):
     return render(request, "landing.html")
 
 
+@login_required
 def dashboard(request):
-    return render(request, "dashboard.html")
+    user_park_infos = UserParkInfo.objects.filter(user=request.user)
+
+    return render(request, "dashboard.html", {"user_park_infos": user_park_infos})
 
 
 class Signin(LoginView):
@@ -50,7 +54,7 @@ def signup(request):
     return render(request, "signup.html", context)
 
 
-class UserParkInfoCreate(CreateView):
+class UserParkInfoCreate(LoginRequiredMixin, CreateView):
     model = UserParkInfo
     form_class = UserParkInfoForm
     template_name = "user_parkinfo_form.html"
@@ -70,10 +74,6 @@ class UserParkInfoCreate(CreateView):
                     form.instance.chosen_photo = park.photos.get(id=photo_id)
                 except ParkPhoto.DoesNotExist:
                     pass
-            else:
-                first_photo = park.photos.first()
-                if first_photo:
-                    form.instance.chosen_photo = first_photo
             form.instance.user = user
             form.instance.park = park
 
@@ -86,3 +86,14 @@ class UserParkInfoCreate(CreateView):
 
     def get_success_url(self):
         return reverse_lazy("dashboard")
+
+    class UserParkInfoUpdate(LoginRequiredMixin, UpdateView):
+        model = UserParkInfo
+        form_class = UserParkInfoEditForm
+        template_name = "user_parkinfo_edit.html"
+
+        def get_queryset(self):
+            return UserParkInfo.objects.filter(user=self.request.user)
+
+        def get_success_url(self):
+            return reverse_lazy("dashboard")

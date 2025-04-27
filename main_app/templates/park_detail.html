@@ -16,6 +16,7 @@
     {% endif %}
     {% if user.is_authenticated %}
     <div class = "add-to-my-parks">
+        
         <a class = "btn" href="{% url 'add_user_park' park.id %}">Add Park (no photo selected)</a>
     </div>
     {% endif %}
