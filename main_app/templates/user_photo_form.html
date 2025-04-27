@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock%}
+{% block content %}
+<h1>Upload a New Photo</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Upload Photo</button>
+</form>
+
+<div style="margin-top: 2rem;">
+    <a href="{% url 'userpark_detail' pk=parkinfo_id %}" class="btn">← Back to Park Details</a>
+</div>
+{% endblock %}

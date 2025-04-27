@@ -11,37 +11,40 @@
 <div class="dashboard-grid">
     {% for user_park in user_park_infos %}
         <div class="park-card">
-            {% if user_park.chosen_photo %}
-                <img src="{{ user_park.chosen_photo.image_url }}" alt="{{ user_park.park.name }}"/>
-            {% elif user_park.park.photo_url %}
-                <img src="{{ user_park.park.photo_url}}" alt="{{ user_park.park.name }}"/>
-            {% else %}
-                <div class="no-photo">No Photo Available</div>
-            {% endif %}
-            <div class="park-info-container">
-                <div class="park-info">
-                    <h2>{{ user_park.park.name }}</h2>
+            <a href="{% url 'userpark_detail' user_park.id %}">
+                {% if user_park.chosen_photo %}
+                    <img src="{{ user_park.chosen_photo.image_url }}" alt="{{ user_park.park.name }}"/>
+                {% elif user_park.park.photo_url %}
+                    <img src="{{ user_park.park.photo_url}}" alt="{{ user_park.park.name }}"/>
+                {% else %}
+                    <div class="no-photo">No Photo Available</div>
+                {% endif %}
+                <div class="park-info-container">
+                    <div class="park-info">
+                        <h2>{{ user_park.park.name }}</h2>
 
-                    {% if user_park.visited %}
-                        <span class = "badge-visited">Visited</span>
-                    {% else %}
-                        <span class="badge-planned">Planned Visit</span>
-                    {% endif %}
+                        {% if user_park.visited %}
+                            <span class = "badge-visited">Visited</span>
+                        {% else %}
+                            <span class="badge-planned">Planned Visit</span>
+                        {% endif %}
 
-                    {% if user_park.rating %}
-                        <p><strong>Rating: </strong> {{ user_park.rating }} </p>
-                    {% endif %}
+                        {% if user_park.rating %}
+                            <p><strong>Rating: </strong> {{ user_park.rating }} </p>
+                        {% endif %}
 
-                    {% if user_park.notes %}
-                        <p>{{ user_park.notes }}</p>
-                    {% endif %}
+                        {% if user_park.notes %}
+                            <p>{{ user_park.notes }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-actions">
+                        <a href="{% url 'edit_user_park' user_park.id %}" class="btn small-btn">Edit</a>
+                        <a href="{% url 'delete_user_park' user_park.id %}" class="btn small-btn danger-btn">Delete</a>
+                    </div>
                 </div>
-                <div class="card-actions">
-                    <a href="{% url 'edit_user_park' user_park.id %}" class="btn small-btn">Edit</a>
-                    <a href="{% url 'delete_user_park' user_park.id %}" class="btn small-btn danger-btn">Delete</a>
-                </div>
-            </div>
+            </a>
         </div>
+        
     {% endfor%}
 </div>
 {% else %}

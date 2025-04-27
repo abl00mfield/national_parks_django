@@ -29,4 +29,7 @@ urlpatterns = [
         views.UserParkInfoDelete.as_view(),
         name="delete_user_park",
     ),
+    path(
+        "userparks/<int:pk>", views.UserParkInfoDetail.as_view(), name="userpark_detail"
+    ),
 ]

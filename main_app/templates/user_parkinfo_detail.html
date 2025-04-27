@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head%}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock%}
+
+{% block content %}
+<h1>{{ object.park.name }}</h1>
+
+{% if object.chosen_photo %}
+    <div class="chosen-photo">
+        <img src="{{ object.chosen_photo.image_url }}" alt="Selected Park Photo" >
+    </div>
+{% endif %}
+
+{% if object.visited %}
+    <span class="badge-visited">Visited</span>
+{% else %}
+    <span class="badge-planned">Planned Visit</span>
+{% endif %}
+
+{% if object.rating %}
+    <p><strong>Rating:</strong> {{ object.rating }} / 5</p>
+{% endif %}
+
+{% if object.notes %}
+    <p><strong>Notes:</strong> {{ object.notes }}</p>
+{% else %}
+    <p>No notes added yet.</p>
+{% endif %}
+
+{% if object.activities %}
+    <p><strong>Activities:</strong> {{ object.activities }}</p>
+{% endif %}
+
+
+<div style="margin-top: 2rem;">
+    <h2>My Photo Gallery</h2>
+
+    {% if object.user_photos.all %}
+        <div class="photo-gallery">
+            {% for photo in object.user_photos.all %}
+                <div class="photo-item">
+                    <img src="{{ photo.image.url }}" alt="{{ photo.caption }}">
+                    {% if photo.caption %}
+                        <p>{{ photo.caption }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No personal photos uploaded yet.</p>
+    {% endif %}
+
+    <h2>Upload a New Photo</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Upload Photo</button>
+    </form>
+</div>
+<a href="{% url 'dashboard' %}" class="btn" style="margin-top: 2rem;">← Back to My Parks</a>
+{% endblock %}

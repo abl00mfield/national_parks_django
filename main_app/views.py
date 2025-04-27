@@ -4,10 +4,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormMixin
 from django.contrib import messages
-from .models import UserParkInfo, NationalPark, ParkPhoto
-from .forms import UserParkInfoForm
+from .models import UserParkInfo, NationalPark, ParkPhoto, UserPhoto
+from .forms import UserParkInfoForm, UserPhotoForm
 from django.urls import reverse_lazy
 
 
@@ -108,7 +109,7 @@ class UserParkInfoUpdate(LoginRequiredMixin, UpdateView):
 
 
 class UserParkInfoDelete(LoginRequiredMixin, DeleteView):
-    mode = UserParkInfo
+    model = UserParkInfo
     template_name = "user_parkinfo_confirm_delete.html"
     success_url = reverse_lazy("dashboard")
 
@@ -118,3 +119,44 @@ class UserParkInfoDelete(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(request, "Park deleted successfully!")
         return super().delete(request, *args, **kwargs)
+
+
+class UserParkInfoDetail(LoginRequiredMixin, FormMixin, DetailView):
+    model = UserParkInfo
+    template_name = "user_parkinfo_detail.html"
+    form_class = UserPhotoForm
+
+    def get_queryset(self):
+        return UserParkInfo.objects.filter(user=self.request.user)
+
+    def get_success_url(self):
+        return reverse_lazy("userpark_detail", kwargs={"pk": self.object.pk})
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            new_photo = form.save(commit=False)
+            new_photo.user_park_info = self.object
+            new_photo.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+# class UserPhotoCreate(LoginRequiredMixin, CreateView):
+#     model = UserPhoto
+#     fields = ["image", "caption"]
+#     template_name = "user_photo_form.html"
+
+#     def form_valid(self, form):
+#         user_park_info = UserParkInfo.objects.get(
+#             id=self.kwargs["parkinfo_id"], user=self.request.user
+#         )
+#         form.instance.user_park_info = user_park_info
+#         return super().form_valid(form)
+
+#     def get_success_url(self):
+#         return reverse_lazy(
+#             "userpark_detail", kwargs={"pk": self.kwargs["parkinfo_id"]}
+#         )

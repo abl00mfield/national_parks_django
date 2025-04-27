@@ -78,3 +78,32 @@
   background-color: #dc3545; /* Bootstrap red */
   color: white;
 }
+
+.chosen-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  max-width: 400px;
+}
+
+.photo-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.photo-item {
+  flex: 0 0 250px;
+  max-width: 250px;
+}
+
+.photo-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
