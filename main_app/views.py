@@ -4,7 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib import messages
 from .models import UserParkInfo, NationalPark, ParkPhoto
 from .forms import UserParkInfoForm, UserParkInfoEditForm
 from django.urls import reverse_lazy
@@ -87,13 +88,31 @@ class UserParkInfoCreate(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy("dashboard")
 
-    class UserParkInfoUpdate(LoginRequiredMixin, UpdateView):
-        model = UserParkInfo
-        form_class = UserParkInfoEditForm
-        template_name = "user_parkinfo_edit.html"
 
-        def get_queryset(self):
-            return UserParkInfo.objects.filter(user=self.request.user)
+class UserParkInfoUpdate(LoginRequiredMixin, UpdateView):
+    model = UserParkInfo
+    form_class = UserParkInfoEditForm
+    template_name = "user_parkinfo_edit.html"
 
-        def get_success_url(self):
-            return reverse_lazy("dashboard")
+    def form_valid(self, form):
+        messages.success(self.request, "Park information updated successfully!")
+        return super().form_valid(form)
+
+    def get_queryset(self):
+        return UserParkInfo.objects.filter(user=self.request.user)
+
+    def get_success_url(self):
+        return reverse_lazy("dashboard")
+
+
+class UserParkInfoDelete(LoginRequiredMixin, DeleteView):
+    mode = UserParkInfo
+    template_name = "user_parkinfo_confirm_delete.html"
+    success_url = reverse_lazy("dashboard")
+
+    def get_queryset(self):
+        return UserParkInfo.objects.filter(user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Park deleted successfully!")
+        return super().delete(request, *args, **kwargs)

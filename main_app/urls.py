@@ -19,4 +19,14 @@ urlpatterns = [
         views.UserParkInfoCreate.as_view(),
         name="add_user_park_with_photo",
     ),
+    path(
+        "userparks/<int:pk>/edit",
+        views.UserParkInfoUpdate.as_view(),
+        name="edit_user_park",
+    ),
+    path(
+        "userparks/<int:pk>/delete/",
+        views.UserParkInfoDelete.as_view(),
+        name="delete_user_park",
+    ),
 ]

@@ -124,3 +124,28 @@ footer {
   background-color: #4682b4; /* Sky Blue */
   transform: translateY(-2px);
 }
+
+.messages {
+  margin: 1rem auto;
+  width: 90%;
+  max-width: 800px;
+}
+
+.message {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  opacity: 1;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}

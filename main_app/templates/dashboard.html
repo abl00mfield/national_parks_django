@@ -35,8 +35,8 @@
             {% endif %}
 
             <div class="class-actions">
-                <a href="" class="btn small-btn">Edit</a>
-                <a href="" class="btn small-btn danger-btn">Delete</a>
+                <a href="{% url 'edit_user_park' user_park.id %}" class="btn small-btn">Edit</a>
+                <a href="{% url 'delete_user_park' user_park.id %}" class="btn small-btn danger-btn">Delete</a>
             </div>
         </div>
     {% endfor%}

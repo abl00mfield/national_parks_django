@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Delete {{ object.park.name }}?</h1>
+
+<p>Are you sure you want to remove this park from your collection?</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn danger-btn">Yes, Delete</button>
+    <a href="{% url 'dashboard' %}" class="btn">Cancel</a>
+</form>
+{% endblock %}
