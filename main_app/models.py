@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import os
+from cloudinary_storage.storage import MediaCloudinaryStorage
 
 
 class NationalPark(models.Model):
@@ -64,6 +65,3 @@ class UserPhoto(models.Model):
             if os.path.isfile(self.image.path):
                 os.remove(self.image.path)
         super().delete(*args, **kwargs)
-
-
-# Create your models here.

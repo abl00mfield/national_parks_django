@@ -132,6 +132,11 @@ class UserParkInfoDetail(LoginRequiredMixin, FormMixin, DetailView):
     def get_success_url(self):
         return reverse_lazy("userpark_detail", kwargs={"pk": self.object.pk})
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({"files": self.request.FILES})
+        return kwargs
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
