@@ -46,6 +46,7 @@
                     {% if photo.caption %}
                         <p>{{ photo.caption }}</p>
                     {% endif %}
+                    <a class ="btn danger-btn small-btn" href="{% url 'delete_user_photo' photo.pk %}">Delete</a>
                 </div>
             {% endfor %}
         </div>

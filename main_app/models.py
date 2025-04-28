@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
 
 
 class NationalPark(models.Model):
@@ -57,6 +58,12 @@ class UserPhoto(models.Model):
 
     def __str__(self):
         return f"Photo for {self.user_park_info.park.name} by {self.user_park_info.user.username}"
+
+    def delete(self, *args, **kwargs):
+        if self.image:
+            if os.path.isfile(self.image.path):
+                os.remove(self.image.path)
+        super().delete(*args, **kwargs)
 
 
 # Create your models here.

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/confirm-delete.css' %}">
+{% endblock%}
+<h1>Delete Photo</h1>
+
+<p>Are you sure you want to delete this photo?</p>
+
+<img class="confirm_delete" src="{{ object.image.url }}" alt="{{ object.caption }}" >
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn danger-btn">Yes, Delete Photo</button>
+    <a href="{% url 'userpark_detail' pk=object.user_park_info.pk %}" class="btn cancel-btn" >Cancel</a>
+</form>
+{% endblock %}

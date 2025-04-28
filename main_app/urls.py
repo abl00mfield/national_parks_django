@@ -32,4 +32,9 @@ urlpatterns = [
     path(
         "userparks/<int:pk>", views.UserParkInfoDetail.as_view(), name="userpark_detail"
     ),
+    path(
+        "userphotos/<int:pk>/delete/",
+        views.UserPhotoDelete.as_view(),
+        name="delete_user_photo",
+    ),
 ]

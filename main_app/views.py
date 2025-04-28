@@ -139,24 +139,24 @@ class UserParkInfoDetail(LoginRequiredMixin, FormMixin, DetailView):
             new_photo = form.save(commit=False)
             new_photo.user_park_info = self.object
             new_photo.save()
+            messages.success(self.request, "Picture added successfully!")
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
 
-# class UserPhotoCreate(LoginRequiredMixin, CreateView):
-#     model = UserPhoto
-#     fields = ["image", "caption"]
-#     template_name = "user_photo_form.html"
+class UserPhotoDelete(LoginRequiredMixin, DeleteView):
+    model = UserPhoto
+    template_name = "user_photo_confirm_delete.html"
 
-#     def form_valid(self, form):
-#         user_park_info = UserParkInfo.objects.get(
-#             id=self.kwargs["parkinfo_id"], user=self.request.user
-#         )
-#         form.instance.user_park_info = user_park_info
-#         return super().form_valid(form)
+    def get_success_url(self):
+        return reverse_lazy(
+            "userpark_detail", kwargs={"pk": self.object.user_park_info.pk}
+        )
 
-#     def get_success_url(self):
-#         return reverse_lazy(
-#             "userpark_detail", kwargs={"pk": self.kwargs["parkinfo_id"]}
-#         )
+    def get_queryset(self):
+        return UserPhoto.objects.filter(user_park_info__user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, "Photo deleted successfully")
+        return super().delete(request, *args, **kwargs)
